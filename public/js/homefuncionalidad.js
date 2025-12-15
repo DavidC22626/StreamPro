@@ -377,6 +377,7 @@ function closeCrudModal() {
     document.getElementById('crudModal').classList.remove('active');
 }
 
+//Reproductor de video
 function playVideo(title) {
     var movie = allMovies.find(function (m) { return m.titulo_pel === title; });
 
@@ -398,6 +399,7 @@ function playVideo(title) {
     }
 }
 
+//cerrar reproductor
 function closeVideo() {
     var videoPlayer = document.getElementById('videoPlayer');
     var mainVideo = document.getElementById('mainVideo');
@@ -407,12 +409,14 @@ function closeVideo() {
     videoPlayer.classList.remove('active');
 }
 
+//Mover carrusel
 function scrollRow(button, direction) {
     var container = button.parentElement.querySelector('.row-posters');
     var scrollAmount = direction === 'left' ? -600 : 600;
     container.scrollLeft += scrollAmount;
 }
 
+//Abrir modal de info
 function openModal(title) {
     var movie = allMovies.find(function (m) { return m.title === title; });
     document.getElementById('modal').classList.add('active');
@@ -423,6 +427,7 @@ function openModal(title) {
     }
 }
 
+//cerrar modal
 function closeModal() {
     document.getElementById('modal').classList.remove('active');
 }
@@ -501,11 +506,11 @@ document.getElementById('searchInput').addEventListener('input', function (e) {
     }
 });
 
-//Series
 // ============================================
 // CRUD SERIES (NIVEL 1)
 // ============================================
 
+//Obtener todas las series de la base de datos
 function getSeries() {
     fetch('/api/series')
         .then(response => response.json())
@@ -520,6 +525,7 @@ function getSeries() {
         .catch(error => console.log("Error al cargar las series: " + error));
 }
 
+//Actualizar la tabla de series
 function renderSeriesAdminTable() {
     const tbody = document.getElementById('seriesTableBody');
     tbody.innerHTML = '';
@@ -547,6 +553,7 @@ function renderSeriesAdminTable() {
     });
 }
 
+//Abrir modal para agregar nueva serie o editar
 function openAddSeriesModal() {
     currentSerieId = null;
     document.getElementById('seriesCrudModalTitle').textContent = 'Agregar Serie';
@@ -554,6 +561,7 @@ function openAddSeriesModal() {
     document.getElementById('seriesCrudModal').classList.add('active');
 }
 
+//Agregar nueva serie
 function createSerie(serieData) {
     return fetch('/api/agregar-serie', {
         method: 'POST',
@@ -562,6 +570,7 @@ function createSerie(serieData) {
     }).then(res => res.json());
 }
 
+//Actualizar serie
 function updateSerie(id, serieData) {
     return fetch('/api/actualizar-serie/' + id, {
         method: 'PUT',
@@ -570,6 +579,7 @@ function updateSerie(id, serieData) {
     }).then(res => res.json());
 }
 
+//Guardar la serie, valiadar si se actualiza o se agrega
 function saveSerie(event) {
     event.preventDefault();
 
@@ -628,94 +638,9 @@ function saveSerie(event) {
                 }
             });
     }
-
-    // try {
-    //     if (currentSerieId != null) {
-    //         // Editar
-    //         console.log("Editando serie:", currentSerieId);
-    //         fetch('/api/actualizar-serie/' + currentSerieId, {
-    //             method: 'PUT',
-    //             headers: { 'Content-Type': 'application/json' },
-    //             body: JSON.stringify(serieData)
-    //         })
-    //             .then(response => response.json())
-    //             .then(resultado => {
-    //                 if (resultado.exito) {
-    //                     currentSerieId = null;
-    //                     alert('¡Serie actualizada exitosamente!');
-    //                     closeSeriesCrudModal();
-    //                     getSeries();
-    //                 } else {
-    //                     alert('Error: ' + resultado.error);
-    //                 }
-    //             });
-    //     } else {
-    //         // Agregar
-    //         console.log("Agregando serie nueva");
-    //         fetch('/api/agregar-serie', {
-    //             method: 'POST',
-    //             headers: { 'Content-Type': 'application/json' },
-    //             body: JSON.stringify(serieData)
-    //         })
-    //             .then(response => response.json())
-    //             .then(resultado => {
-    //                 if (resultado.exito) {
-    //                     currentSerieId = null;
-    //                     alert('¡Serie agregada exitosamente!');
-    //                     closeSeriesCrudModal();
-    //                     getSeries();
-    //                 } else {
-    //                     alert('Error: ' + resultado.error);
-    //                 }
-    //             });
-    //     }
-    // } catch (error) {
-    //     console.error('Error:', error);
-    //     alert('Hubo un error');
-    // }
-    // fetch('/api/buscar-serie-titulo?titulo=' + encodeURIComponent(title))
-    //     .then(response => response.json())
-    //     .then(resultado => {
-    //         if (resultado.exito) {
-    //             // Editar
-    //             console.log("Editando serie:", title);
-    //             fetch('/api/actualizar-serie/' + title, {
-    //                 method: 'PUT',
-    //                 headers: { 'Content-Type': 'application/json' },
-    //                 body: JSON.stringify(serieData)
-    //             })
-    //                 .then(response => response.json())
-    //                 .then(resultado => {
-    //                     if (resultado.exito) {
-    //                         alert('¡Serie actualizada exitosamente!');
-    //                         closeSeriesCrudModal();
-    //                         getSeries();
-    //                     } else {
-    //                         alert('Error: ' + resultado.error);
-    //                     }
-    //                 });
-    //         } else {
-    //             // Agregar
-    //             console.log("Agregando serie nueva");
-    //             fetch('/api/agregar-serie', {
-    //                 method: 'POST',
-    //                 headers: { 'Content-Type': 'application/json' },
-    //                 body: JSON.stringify(serieData)
-    //             })
-    //                 .then(response => response.json())
-    //                 .then(resultado => {
-    //                     if (resultado.exito) {
-    //                         alert('¡Serie agregada exitosamente!');
-    //                         closeSeriesCrudModal();
-    //                         getSeries();
-    //                     } else {
-    //                         alert('Error: ' + resultado.error);
-    //                     }
-    //                 });
-    //         }
-    //     });
 }
 
+//Rellenar formulario cuando se edita
 function editSerie(id) {
     currentSerieId = id;
     console.log("id serie ", currentSerieId);
@@ -744,6 +669,7 @@ function editSerie(id) {
         });
 }
 
+//Eliminar serie
 function deleteSerie(id) {
     if (confirm('¿Estás seguro de eliminar esta serie?')) {
         fetch('/api/eliminar-serie/' + id, {
@@ -762,6 +688,7 @@ function deleteSerie(id) {
     }
 }
 
+//cerrar formulario de serie
 function closeSeriesCrudModal() {
     document.getElementById('seriesCrudModal').classList.remove('active');
 }
@@ -770,6 +697,7 @@ function closeSeriesCrudModal() {
 // CRUD TEMPORADAS (NIVEL 2)
 // ============================================
 
+//Obtener las temporadas de la serie
 function manageSeries(serieId) {
     currentSerieId = serieId;
     currentSeasonId = null;
@@ -777,6 +705,7 @@ function manageSeries(serieId) {
     document.getElementById('seasonsModal').classList.add('active');
 }
 
+//Obtener temporadas
 function getSeasons(serieId) {
     fetch('/api/serie/' + serieId + '/temporadas')
         .then(response => response.json())
@@ -790,6 +719,7 @@ function getSeasons(serieId) {
         });
 }
 
+//Renderizar o actualizar tabla de temporadas
 function renderSeasonsTable() {
     const tbody = document.getElementById('seasonsTableBody');
     tbody.innerHTML = '';
@@ -826,12 +756,14 @@ function renderSeasonsTable() {
     }
 }
 
+//Abrir el modal para agregar una temporada
 function openAddSeasonModal() {
     document.getElementById('seasonCrudModalTitle').textContent = 'Agregar Temporada';
     document.getElementById('seasonForm').reset();
     document.getElementById('seasonCrudModal').classList.add('active');
 }
 
+//Guardar temporada
 function saveSeason(event) {
     event.preventDefault();
 
@@ -918,6 +850,7 @@ function saveSeason(event) {
     }
 }
 
+//Editar temporadas
 function editSeason(seasonId) {
     currentSeasonId = seasonId;
     fetch('/api/temporada/' + seasonId)
@@ -943,6 +876,7 @@ function editSeason(seasonId) {
         });
 }
 
+//Eliminar temporada
 function deleteSeason(seasonId) {
     if (confirm('¿Estás seguro? Se eliminarán todos los capítulos asociados.')) {
         fetch('/api/eliminar-temporada/' + seasonId, {
@@ -960,10 +894,12 @@ function deleteSeason(seasonId) {
     }
 }
 
+//cerrar formulario
 function closeSeasonCrudModal() {
     document.getElementById('seasonCrudModal').classList.remove('active');
 }
 
+//cerrar el modal de temporadas
 function closeSeasonsModal() {
     document.getElementById('seasonsModal').classList.remove('active');
 }
@@ -993,6 +929,7 @@ function getEpisodes(seasonId) {
         });
 }
 
+//Actualizar la tabla episodios
 function renderEpisodesTable() {
     const tbody = document.getElementById('episodesTableBody');
     tbody.innerHTML = '';
@@ -1022,12 +959,14 @@ function renderEpisodesTable() {
     }
 }
 
+//Abrir modal para agregar capitulos
 function openAddEpisodeModal() {
     document.getElementById('episodeCrudModalTitle').textContent = 'Agregar Capítulo';
     document.getElementById('episodeForm').reset();
     document.getElementById('episodeCrudModal').classList.add('active');
 }
 
+//Guardar episodio
 function saveEpisode(event) {
     event.preventDefault();
     document.getElementById('episodeIndice').style.display = 'block';
@@ -1109,6 +1048,7 @@ function saveEpisode(event) {
     }
 }
 
+//Editar episodio
 function editEpisode(episodeId) {
     console.log(episodeId);
     fetch('/api/capitulo/' + episodeId)
@@ -1132,6 +1072,7 @@ function editEpisode(episodeId) {
         });
 }
 
+// Eliminar episodio
 function deleteEpisode(episodeId) {
     if (confirm('¿Estás seguro de eliminar este capítulo?')) {
         fetch('/api/eliminar-capitulo/' + episodeId, {
@@ -1149,10 +1090,12 @@ function deleteEpisode(episodeId) {
     }
 }
 
+//cerrar formulario del crud de los episodios
 function closeEpisodeCrudModal() {
     document.getElementById('episodeCrudModal').classList.remove('active');
 }
 
+//cerrar el modal de los episodios
 function closeEpisodesModal() {
     document.getElementById('episodesModal').classList.remove('active');
 }
